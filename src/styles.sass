@@ -1,1 +1,46 @@
 /* You can add global styles to this file, and also import other style files */
+html, body, main
+  min-height: 100vh
+
+footer, header
+  padding: 1rem
+  background-color: #f1f1f1
+
+main
+  display: grid
+  grid-template-areas: "form" "search" "table"
+  grid-template-columns: 1fr
+  // grid-template-rows: repeat(3, auto)
+  gap: 1.5rem
+  position: relative
+  width: 90%
+  margin: 0 auto
+
+  section
+    box-sizing: border-box
+    padding: 1.5rem 0
+
+    h2
+      margin: 0
+  .form
+    legend
+      font-size: 1rem !important
+.form-area
+  grid-area: form
+.search-area
+  grid-area: search
+.table-area
+  grid-area: table
+.table
+  padding: 1rem 0
+  
+  th, td
+    padding: 1rem 0.8rem
+    width: calc( 1 * 0.33 )
+    word-break: break-all
+
+@media (min-width: 990px)
+  main
+    grid-template-areas:  "search search form" "table table form" 
+    grid-template-columns: repeat(2, 1fr)
+    grid-template-rows: repeat(2, max(100px, 180px))
