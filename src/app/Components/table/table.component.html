@@ -1,24 +1,19 @@
-<section class="table-area">
-  <h2>Lista de usuario</h2>
-  <table class="table">
-    <thead class="table__header">
-      <tr>
-        <th class="text-primary" scope="col">Nombre</th>
-        <th class="text-primary" scope="col">Rol</th>
-        <th class="text-primary" scope="col">Estado</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td scope="col">Harold Daniel Castro Moreno</td>
-        <td scope="col">Administrador</td>
-        <td scope="col">Activo</td>
-      </tr>
-      <tr>
-        <td scope="col">Harold Daniel Castro Moreno</td>
-        <td scope="col">Editor</td>
-        <td scope="col">Inactivo</td>
-      </tr>
-    </tbody>
-  </table>
-</section>
+<h2>Lista de usuario</h2>
+<table class="table">
+  <thead class="table__header">
+    <tr>
+      <th class="text-primary" scope="col">Nombre</th>
+      <th class="text-primary" scope="col">Rol</th>
+      <th class="text-primary" scope="col">Estado</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let usuario of data" (click)="editUser(usuario)">
+      <td scope="col">{{usuario.nombre}}</td>
+      <td scope="col">{{usuario.rol.nombre}}</td>
+      <td scope="col">{{usuario.activo === '1' ? "Activo": "Inactivo"}}</td>
+    </tr>
+  </tbody>
+</table>
+<!-- Formularios -->
+<app-form [usuario]="editar" [parametro]="parametro" (nuevaData)="nuevaData($event)"></app-form>

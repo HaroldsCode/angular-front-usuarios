@@ -1,39 +1,33 @@
-<section class="form-area">
-  <h2>Agregar usuario</h2>
-  <form class="form">
-    <div class="form-group">
-      <label class="form-label text-primary mt-3" for="nombre">Nombre</label>
-      <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Pepito">
-    </div>
-    <div class="form-group">
-      <label class="form-label text-primary mt-3" for="rol">Rol</label>
-      <select class="form-select" name="id_rol" id="rol">
-        <option value="0">Selecciones una opción...</option>
-        <option value="1">Admin</option>
-        <option value="2">Auditor</option>
-        <option value="3">Auxiliar</option>
-      </select>
-    </div>
-    <fieldset class="form-group">
-      <legend class="form-label text-primary mt-3 radio">Activo</legend>
-      <div class="d-flex align-items-start gap-4">
-        <div class="form-check">
-          <input type="radio" class="form-check-input" name="activo" id="activo_si" value="si">
-          <label class="form-check-label text-primary" for="activo_si">Si</label>
-        </div>
-        <div class="form-check">
-          <input type="radio" class="form-check-input" name="activo" id="activo_no" value="no" checked>
-          <label class="form-check-label text-primary" for="activo_no">No</label>
-        </div>
+<h2>{{title}}</h2>
+<form class="form" [formGroup]="form" (submit)="guardar()">
+  <div class="form-group">
+    <label class="form-label text-primary mt-3" for="nombre">Nombre *</label>
+    <input type="text" class="form-control" id="nombre" formControlName="nombre" placeholder="Pepito">
+  </div>
+  <div class="form-group">
+    <label class="form-label text-primary mt-3" for="rol">Rol *</label>
+    <select class="form-select" formControlName="id_rol" id="rol">
+      <option value="0">Selecciones una opción...</option>
+      <option *ngFor="let op of options" value={{op.id_rol}}>{{op.nombre}}</option>
+    </select>
+  </div>
+  <fieldset class="form-group">
+    <legend class="form-label text-primary mt-3 radio">Activo *</legend>
+    <div class="d-flex align-items-start gap-4">
+      <div class="form-check">
+        <input type="radio" class="form-check-input" formControlName="activo" id="activo_si" value="1" >
+        <label class="form-check-label text-primary" for="activo_si">Si</label>
       </div>
-    </fieldset>
-    <input type="hidden" name="id_usuario" value="1">
-    <div class="form-group mt-3 d-flex justify-content-end gap-2">
-      <button class="btn btn-info" type="submit">Guardar</button>
+      <div class="form-check">
+        <input type="radio" class="form-check-input" formControlName="activo" id="activo_no" value="0" >
+        <label class="form-check-label text-primary" for="activo_no">No</label>
+      </div>
     </div>
-    <div class="form-group mt-3 d-flex justify-content-end gap-2">
-      <button class="btn btn-danger" type="submit">Eliminar</button>
-      <button class="btn btn-info" type="submit">Editar</button>
-    </div>
-  </form>
-</section>
+  </fieldset>
+  <div class="form-group mt-3 d-flex justify-content-end gap-lg-4 gap-md-2 gap-sm-1">
+    <button class="btn btn-sm btn-danger" type="button" (click)="cancelar()" >Cancelar</button>
+    <button *ngIf="canEdit" class="btn btn-sm btn-warning" type="button" (click)="deleteUser(usuario.id_usuario)" >Eliminar</button>
+    <button class="btn btn-sm btn-info" type="submit">{{ canEdit ? 'Editar' : 'Guardar'}}</button>
+  </div>
+</form>
+

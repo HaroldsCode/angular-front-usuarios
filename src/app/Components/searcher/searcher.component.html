@@ -1,12 +1,12 @@
-<section class="search-area">
-  <h2>Buscar usuario</h2>
-  <form class="form">
-    <div class="form-group">
-      <input type="text" class="form-control mt-3" id="nombre" name="nombre" placeholder="Pepito">
-    </div>
-    <div class="form-group mt-3 d-flex justify-content-end gap-4">
-      <button class="btn btn-secondary" type="submit">Limpiar</button>
-      <button class="btn btn-info" type="submit">Buscar</button>
-    </div>
-  </form>
-</section>
+<h2>Buscar usuario</h2>
+<form class="form" [formGroup]="form" (submit)="buscar()">
+  <div class="form-group">
+    <input type="text" class="form-control mt-3" id="nombre" formControlName="nombre" placeholder="Pepito" autocomplete="off" required>
+  </div>
+  <div class="form-group mt-3 d-flex justify-content-end gap-lg-4 gap-md-2 gap-sm-1">
+    <button class="btn btn-sm btn-warning" type="button" (click)="reset()">Limpiar</button>
+    <button class="btn btn-sm btn-info" type="submit">Buscar</button>
+  </div>
+</form>
+<!-- Tabla -->
+<app-table [data]="data" [parametro]="buscador"></app-table>
