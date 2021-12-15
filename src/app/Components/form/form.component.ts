@@ -91,17 +91,7 @@ export class FormComponent implements OnChanges {
             nombre: this.getNombre(this.form.value.id_rol)
           },
           activo: this.form.value.activo
-        }).subscribe(() => {
-          if(!!this.parametro){
-            this.sUsuario.getUsersByName(this.parametro).subscribe(usuarios => {
-              this.nuevaData.emit(usuarios)
-            });
-          }else{
-            this.sUsuario.getUserList().subscribe(usuarios => {
-              this.nuevaData.emit(usuarios)
-            });
-          }
-        })
+        }).subscribe(() => this.resetAll() )
       }else{
         this.sUsuario.createUser({
           nombre: this.form.value.nombre,
@@ -110,67 +100,47 @@ export class FormComponent implements OnChanges {
             nombre: this.getNombre(this.form.value.id_rol)
           },
           activo: this.form.value.activo
-        }).subscribe(() => {
-          if(!!this.parametro){
-            this.sUsuario.getUsersByName(this.parametro).subscribe(usuarios => {
-              this.data = [];
-              usuarios.forEach(usuario => {
-                this.data.push(usuario)
-              });
-            });
-          }else{
-            this.sUsuario.getUserList().subscribe(usuarios => {
-              this.data = [];
-              usuarios.forEach(usuario => {
-                this.data.push(usuario)
-              });
-            });
-          }
-        })
-      }
-      this.title = 'Crear usuario';
-      this.form.patchValue({
-        nombre: '',
-        id_rol: 0,
-        activo: '0',
-      })
-      this.usuario = {
-        id_usuario: 0,
-        nombre: '',
-        activo: '0',
-        rol: {
-          id_rol: 0,
-          nombre: ''
-        }
+        }).subscribe(() => this.resetAll() )
       }
     }else{
       alert("Llene el formulario")
     }
   }
 
-
   public deleteUser ( id:number ) {
     const response = confirm("¿Está seguro que desea eliminar el usuario?");
     if(response) this.sUsuario.deleteUser(id).subscribe(() => {
-      if(!!this.parametro){
-        this.sUsuario.getUsersByName(this.parametro).subscribe(usuarios => {
-          this.data = [];
-          usuarios.forEach(usuario => {
-            this.data.push(usuario)
-          });
-        });
-      }else{
-        this.sUsuario.getUserList().subscribe(usuarios => {
-          this.data = [];
-          usuarios.forEach(usuario => {
-            this.data.push(usuario)
-          });
-        });
-      }
+      this.resetAll();
     })
   }
 
-
+  public resetAll(){
+    this.title = 'Crear usuario';
+    this.form.patchValue({
+      nombre: '',
+      id_rol: 0,
+      activo: '0',
+    })
+    this.usuario = {
+      id_usuario: 0,
+      nombre: '',
+      activo: '0',
+      rol: {
+        id_rol: 0,
+        nombre: ''
+      }
+    }
+    if(!!this.parametro){
+      this.sUsuario.getUsersByName(this.parametro).subscribe(usuarios => {
+        this.nuevaData.emit(usuarios);
+      });
+    }else{
+      this.sUsuario.getUserList().subscribe(usuarios => {
+        this.nuevaData.emit(usuarios);
+      });
+    }
+  }
+  
   public getNombre(id:number){
     return this.options.find((op) => op.id_rol === id)?.nombre || 'Administrador';
   }

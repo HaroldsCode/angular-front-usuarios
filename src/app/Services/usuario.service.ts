@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
-import { map } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 
 import { Usuario, UsuarioLessId } from 'src/app/Schemas/Usuario.schema';
 import { ErrorRes } from '../Schemas/ErrorRes.schema';
@@ -17,69 +17,61 @@ export class UsuarioService {
   constructor(private http: HttpClient) { }
 
   public getUserList() {
-    try {
-      return this.http.get<Usuario[]>(this.url).pipe(
-        map(response =>  response )
-      );
-    } catch (error) {
-      return this.http.get<ErrorRes>(this.url).pipe(
-        map(response =>  {
-          console.log(response)
-          return []
-        })
-      );
-    }
+    return this.http.get<Usuario[]>(this.url).pipe(
+      map(response =>  response ),
+      catchError(err =>  {
+        alert(err.error.message);
+        return []
+      })
+    );
   }
 
   public getUsersByName(nombre:string) {
-    try {
-      return this.http.get<Usuario[]>(`${this.url}/${nombre}`).pipe(
-        map(response =>  response )
-      );
-    } catch (error) {
-      return this.http.get<ErrorRes>(this.url).pipe(
-        map(response =>  {
-          console.log(response)
-          return []
-        })
-      );
-    }
+    return this.http.get<Usuario[]>(`${this.url}/${nombre}`).pipe(
+      map(response =>  response ),
+      catchError(err => {
+        alert(err.error.message);
+        return []
+      })
+    );
   }
 
   public createUser(usuario: UsuarioLessId){
-    try{
-      return this.http.post(this.url, usuario).pipe(
-        map(() => alert('usuario creado'))
-      )
-    } catch (error) {
-      return this.http.get<ErrorRes>(this.url).pipe(
-        map(response => alert(response.message))
-      );
-    }
+    return this.http.post(`${this.url}`, usuario).pipe(
+      map(() => {
+        alert('usuario creado');
+        return 'ok';
+      }),
+      catchError(err => {
+        alert(err.error.message);
+        return '';
+      })
+    );
   }
 
   public updateUserById(id:number, usuario: UsuarioLessId){
-    try{
-      return this.http.put(`${this.url}/${id}`, usuario).pipe(
-        map(() => alert('usuario actualizado'))
-      )
-    } catch (error) {
-      return this.http.get<ErrorRes>(this.url).pipe(
-        map(response => alert(response.message))
-      );
-    }
+    return this.http.put(`${this.url}/${id}`, usuario).pipe(
+      map(() => {
+        alert('usuario actualizado');
+        return 'ok';
+      }),
+      catchError(err => {
+        alert(err.error.message);
+        return '';
+      })
+    );
   }
 
   public deleteUser(id:number){
-    try {
-      return this.http.delete(`${this.url}/${id}`).pipe();
-    } catch (error) {
-      return this.http.get<ErrorRes>(this.url).pipe(
-        map(response =>  {
-          console.log(response)
-          return []
-        })
-      );
-    }
+    return this.http.delete(`${this.url}/${id}`).pipe(
+      map(() => {
+        alert('usuario eliminado');
+        return 'ok';
+      }),
+      catchError(err =>  {
+        alert(err.error.message);
+        return '';
+      })
+    );
   }
 }
